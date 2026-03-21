@@ -608,7 +608,7 @@ function buildQueue(modules, currentModuleIdx, injectionRate, limit = null, allM
 }
 
 const GLOBAL_STYLE = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -627,7 +627,7 @@ const GLOBAL_STYLE = `
     --tag-bg: #2E2B45;
   }
 
-  body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
   .app { display: flex; height: 100vh; overflow: hidden; }
 
   /* SIDEBAR */
@@ -642,8 +642,8 @@ const GLOBAL_STYLE = `
   .module-item { border-bottom: 1px solid var(--border); }
   .module-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; cursor: pointer; transition: background 0.15s; }
   .module-header:hover { background: var(--bg); }
-  .module-name { font-size: 11px; font-weight: 500; letter-spacing: 0.05em; }
-  .module-meta { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .module-name { font-size: 13px; font-weight: 500; letter-spacing: 0.02em; }
+  .module-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
   .module-chevron { font-size: 9px; color: var(--text-muted); transition: transform 0.2s; }
   .module-chevron.open { transform: rotate(90deg); }
   .concept-list { padding: 0 10px 8px; }
@@ -701,7 +701,7 @@ const GLOBAL_STYLE = `
   .dark-mode .import-feedback.error { background: rgba(231,76,60,0.1); }
 
   /* Buttons */
-  .btn { font-family: 'DM Mono', monospace; cursor: pointer; border: none; border-radius: 3px; font-size: 10px; letter-spacing: 0.04em; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; }
+  .btn { font-family: 'Inter', sans-serif; cursor: pointer; border: none; border-radius: 3px; font-size: 10px; letter-spacing: 0.04em; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; }
   .btn-primary { background: var(--accent); color: #fff; padding: 8px 14px; font-weight: 500; }
   .btn-primary:hover { background: var(--accent-light); }
   .btn-ghost { background: transparent; color: var(--text-muted); padding: 6px 10px; border: 1px solid var(--border); }
@@ -759,7 +759,7 @@ const GLOBAL_STYLE = `
     font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted);
   }
   .module-selector-select {
-    font-family: 'Fraunces', serif; font-size: 18px; font-weight: 300;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 600;
     color: var(--text); background: transparent; border: none; outline: none;
     width: 100%; cursor: pointer; padding: 0; appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7468' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -775,15 +775,15 @@ const GLOBAL_STYLE = `
 
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 32px 36px; margin-bottom: 16px; }
   .card-tag { font-size: 9px; color: var(--text-muted); background: var(--tag-bg); padding: 3px 8px; border-radius: 2px; display: inline-block; margin-bottom: 14px; letter-spacing: 0.05em; text-transform: uppercase; }
-  .card-question { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 300; line-height: 1.45; }
+  .card-question { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.45; }
   .dark-mode .card-question { font-style: italic; }
   .card-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-  .card-answer { font-size: 12px; line-height: 1.7; color: var(--text-muted); }
+  .card-answer { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.75; color: var(--text-muted); }
   .answer-fade { animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
   .rating-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
-  .btn-rating { font-family: 'DM Mono', monospace; cursor: pointer; border-radius: 4px; padding: 10px 8px; font-size: 10px; font-weight: 500; letter-spacing: 0.03em; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 3px; border: 1px solid; }
+  .btn-rating { font-family: 'Inter', sans-serif; cursor: pointer; border-radius: 4px; padding: 10px 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 3px; border: 1px solid; }
   .btn-rating .rating-days { font-size: 9px; opacity: 0.7; font-weight: 300; }
   .btn-auto { background: transparent; color: var(--auto); border-color: var(--auto); }
   .btn-auto:hover { background: var(--auto); color: #fff; }
@@ -968,7 +968,7 @@ function AutorBadge() {
             <div style={{ fontWeight: 500, marginBottom: 8, color: "#4CAF7D" }}>Para la comunidad jurídica ⚖️</div>
             <div style={{ marginBottom: 10 }}>Creado por <strong>Alejandro Véliz Isla</strong> para estudiantes de derecho, gradistas y abogados que buscan mantener fresco su conocimiento.</div>
             <div style={{ marginBottom: 10 }}>Esta herramienta es de uso <strong>100% libre y gratuito</strong>. Si alguien te cobró por acceder a ella, exige tu dinero de vuelta de inmediato.</div>
-            <div style={{ marginBottom: 8 }}>No soy un experto en programación, así que levanté este proyecto apoyándome en inteligencia artificial <em>(Powered by Claude AI)</em>. Tiene harto cariño y está pensado puramente en hacer más llevadera la carga de estudio. ¡Espero que te sea muy útil!</div>
+            <div style={{ marginBottom: 8 }}>No soy un experto en programación, así que levanté este proyecto apoyándome en inteligencia artificial <em>(Powered by Claude AI)</em>. Está hecha con harto cariño y está pensada con la gran misión de hacer más amenas las sesiones de estudio. ¡Espero que sea provechosa para ti!</div>
             <div style={{ borderTop: "1px solid #333", paddingTop: 6, fontSize: 10, color: "#7A7468" }}>Click fuera para cerrar</div>
           </div>
         </>
@@ -1247,6 +1247,9 @@ export default function App() {
         {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           <div className="sidebar-header">
+            <div style={{ paddingBottom: 10, borderBottom: "1px solid var(--border)", marginBottom: 4 }}>
+              <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 22, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--accent)" }}>SPARE</span>
+            </div>
             <div className="sidebar-header-top">
               <span className="sidebar-title">Módulos</span>
               {isEditor ? (
@@ -1642,14 +1645,6 @@ export default function App() {
                   <div className="state-icon">📚</div>
                   <div className="state-title">Sin contenido</div>
                   <div className="state-sub">Usa el botón de Carga Masiva en la barra lateral<br />para importar tus conceptos desde Excel.</div>
-                </div>
-              ) : queue.length === 0 && !currentCard ? (
-                <div className="state-box">
-                  <div className="state-icon">📭</div>
-                  <div className="state-title">Sin conceptos</div>
-                  <div className="state-sub">
-                    Agrega conceptos al módulo actual para comenzar.
-                  </div>
                 </div>
               ) : !sessionStarted && queue.length > 0 ? (
                 <div className="state-box">
