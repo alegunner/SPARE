@@ -1441,7 +1441,18 @@ export default function App() {
               <button className="hamburger" onClick={() => setSidebarOpen(v => !v)}>☰</button>
               <WipBadge />
               <AutorBadge />
-              <span style={{ background: "#E05C5C", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.12em", padding: "2px 7px", borderRadius: 3, textTransform: "uppercase" }}>TEST</span>
+              <a
+                href="https://ko-fi.com/alejandroveliz"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ background: "#B8860B", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}
+              >☕ Invítame un café</a>
+              <a
+                href="https://www.linkedin.com/in/alejandrovi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ background: "#0077B5", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}
+              >in Alejandro Véliz</a>
             </div>
             <div className="topbar-right">
               {sessionActive && (confirmEnd ? (
