@@ -717,7 +717,7 @@ const GLOBAL_STYLE = `
   /* MAIN */
   .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   .topbar { padding: 14px 28px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-left { display: flex; align-items: center; gap: 8px; }
   .topbar-logo { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; }
   .topbar-logo span { color: var(--accent); }
   .topbar-right { display: flex; align-items: center; gap: 10px; }
@@ -828,9 +828,10 @@ const GLOBAL_STYLE = `
     }
 
     /* Topbar: apila left y right en dos filas limpias */
-    .topbar { padding: 10px 14px; gap: 6px; flex-wrap: wrap; align-items: flex-start; }
-    .topbar-left { flex-shrink: 0; }
-    .topbar-right { flex: 1; min-width: 0; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .topbar { padding: 10px 14px; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .topbar-left { flex-wrap: wrap; gap: 5px; align-items: center; }
+    .topbar-left a, .topbar-left span { font-size: 10px !important; padding: 4px 8px !important; white-space: nowrap; }
+    .topbar-right { flex: 1; min-width: 0; gap: 6px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
 
     /* Selectores: ocultar label, ancho flexible para no truncar */
     .select-label { display: none; }
@@ -951,11 +952,11 @@ function WipBadge() {
 function AutorBadge() {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ position: "relative", display: "inline-flex" }}>
+    <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
       <span
         onClick={() => setOpen(v => !v)}
         style={{ fontSize: 10, background: "#2D4A3E", color: "#fff", padding: "2px 6px", borderRadius: 3, fontFamily: "monospace", cursor: "pointer", userSelect: "none", whiteSpace: "nowrap" }}
-      >💡 Creado por Alejandro Véliz Isla</span>
+      >💡 Sobre mí</span>
       {open && (
         <>
           <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 998 }} />
@@ -1247,11 +1248,8 @@ export default function App() {
         {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           <div className="sidebar-header">
-            <div style={{ paddingBottom: 10, borderBottom: "1px solid var(--border)", marginBottom: 4 }}>
+            <div style={{ paddingBottom: 10, borderBottom: "1px solid var(--border)", marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 22, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--accent)" }}>SPARE</span>
-            </div>
-            <div className="sidebar-header-top">
-              <span className="sidebar-title">Módulos</span>
               {isEditor ? (
                 <div style={{ display: "flex", gap: 5 }}>
                   <button className="btn btn-ghost btn-sm" onClick={() => setAddingModule(v => !v)}>
@@ -1282,6 +1280,9 @@ export default function App() {
               ) : (
                 <button className="btn btn-ghost btn-sm" title="Modo editor" onClick={() => setShowPinInput(true)}>🔒</button>
               )}
+            </div>
+            <div className="sidebar-header-top">
+              <span className="sidebar-title">Examen de grado</span>
             </div>
             {isEditor && (
               <button className="btn btn-ghost btn-full btn-dashed" style={{ fontSize: 10 }} onClick={openBulkModal}>
@@ -1433,17 +1434,39 @@ export default function App() {
                 </div>
               );
             })}
+            <div style={{ marginTop: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 18px", borderBottom: "1px solid var(--border)", borderTop: "1px solid var(--border)" }}>
+                <span className="sidebar-title">Tus módulos</span>
+              </div>
+              <div style={{ padding: "10px 18px", borderBottom: "1px solid var(--border)", opacity: 0.45 }}>
+                <div style={{ fontSize: 13, fontWeight: 500, letterSpacing: "0.02em" }}>Próximamente podrás cargar tus propias preguntas</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="sidebar-footer">
+            <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.6 }}>
+              <div style={{ marginBottom: 6, fontWeight: 500, color: "var(--text)" }}>¿Tienes alguna sugerencia, encontraste un error? Contáctame:</div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <a href="https://www.linkedin.com/in/alejandrovi/" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 10, color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent)" }}>
+                  LinkedIn
+                </a>
+                <a href="mailto:alevelizisla@gmail.com?subject=Observaciones%20sobre%20SPARE&body=Hola%20Alejandro%2C%20estuve%20probando%20SPARE%20y%20debo%20comentarte%20lo%20siguiente%3A%0A%0A%0A%0ASaludos"
+                  style={{ fontSize: 10, color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent)" }}>
+                  Correo
+                </a>
+              </div>
+            </div>
           </div>
 
         </aside>
-
         {/* ── MAIN ───────────────────────────────────────── */}
         <main className="main">
           <div className="topbar">
             <div className="topbar-left">
               <button className="hamburger" onClick={() => setSidebarOpen(v => !v)}>☰</button>
-              <WipBadge />
-              <AutorBadge />
+              <div className="autor-badge-wrap" style={{ display: "inline-flex", alignItems: "center" }}><AutorBadge /></div>
               <a
                 href="https://ko-fi.com/alejandroveliz"
                 target="_blank"
@@ -1455,7 +1478,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ background: "#0077B5", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}
-              >in Alejandro Véliz</a>
+              >Mi LinkedIn</a>
             </div>
             <div className="topbar-right">
               {sessionActive && (confirmEnd ? (
