@@ -560,6 +560,15 @@ function isDue(concept) {
   return new Date(concept.nextReview) <= new Date();
 }
 
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function buildQueue(modules, currentModuleIdx, injectionRate, limit = null, allModules = false, activeModules = null, materiaMode = "module") {
   const CIVIL = ["Acto Jurídico","Teoría de las Obligaciones","Contratos General","Teoría de los Bienes","Contratos Parte Especial","Personas","Familia","Sucesorio","Daños"];
   const PROCESAL = ["Procesal Orgánico","Proceso y Procedimiento","Ordinario y Sumario","Ejecutivo y Juicios Especiales","Recursos Civiles","Procesal Penal","Recursos Penales"];
@@ -572,10 +581,9 @@ function buildQueue(modules, currentModuleIdx, injectionRate, limit = null, allM
     } else if (materiaMode === "procesal") {
       pool = modules.filter(m => PROCESAL.includes(m.name) && (!activeModules || activeModules.has(m.id))).flatMap(m => m.concepts);
     } else {
-      // "all" o allModules legacy
       pool = modules.filter(m => !activeModules || activeModules.has(m.id)).flatMap(m => m.concepts);
     }
-    const q = limit ? [...pool].sort(() => Math.random() - 0.5).slice(0, limit) : [...pool].sort(() => Math.random() - 0.5);
+    const q = limit ? shuffle(pool).slice(0, limit) : shuffle(pool);
     return { queue: q, forced: false, injectedCount: 0 };
   }
 
@@ -592,17 +600,15 @@ function buildQueue(modules, currentModuleIdx, injectionRate, limit = null, allM
 
   if (currentAll.length === 0 && otherAll.length === 0) return { queue: [], forced: false };
 
-  const currentPool = limit
-    ? [...currentAll].sort(() => Math.random() - 0.5).slice(0, limit)
-    : [...currentAll].sort(() => Math.random() - 0.5);
+  const currentPool = limit ? shuffle(currentAll).slice(0, limit) : shuffle(currentAll);
 
   const injectCount = injectionRate === 0 ? 0 : Math.max(
     otherAll.length > 0 ? 1 : 0,
     Math.round(currentPool.length * injectionRate)
   );
 
-  const injected = [...otherAll].sort(() => Math.random() - 0.5).slice(0, Math.min(injectCount, otherAll.length));
-  const queue = [...currentPool, ...injected].sort(() => Math.random() - 0.5);
+  const injected = shuffle(otherAll).slice(0, Math.min(injectCount, otherAll.length));
+  const queue = shuffle([...currentPool, ...injected]);
 
   return { queue, forced: false, injectedCount: injected.length };
 }
@@ -985,7 +991,7 @@ function Onboarding({ modules, onComplete }) {
 
   const ONBOARDING_STYLE = `
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-    .ob-wrap { min-height: 100vh; background: #0F0A2E; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .ob-wrap { min-height: 100vh; min-width: 100vw; background: #0F0A2E; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; }
     .ob-inner { width: 100%; max-width: 420px; padding: 48px 32px; text-align: center; }
     .ob-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #7C6FCD; background: rgba(124,111,205,0.15); padding: 6px 16px; border-radius: 999px; display: inline-block; margin-bottom: 24px; }
     .ob-title { font-size: 26px; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin: 0 0 8px; }
@@ -1018,7 +1024,7 @@ function Onboarding({ modules, onComplete }) {
 
   function handleTodosLosMods() {
     const allIds = new Set(modules.filter(m => m.concepts.length > 0).map(m => m.id));
-    onComplete(allIds);
+    onComplete(allIds, true);
   }
 
   function handleElegirMods() {
@@ -1035,7 +1041,7 @@ function Onboarding({ modules, onComplete }) {
 
   function handleComenzar() {
     if (selectedMods.size === 0) return;
-    onComplete(selectedMods);
+    onComplete(selectedMods, false);
   }
 
   const availableMods = modules.filter(m => m.concepts.length > 0);
@@ -1197,9 +1203,7 @@ export default function App() {
         setActiveModules(allIds);
         saveActiveModules(allIds);
       }
-      try {
-        if (!localStorage.getItem("spare_onboarding_done")) setShowOnboarding(true);
-      } catch { setShowOnboarding(true); }
+      setShowOnboarding(true);
       setLoading(false);
     });
   }, []);
@@ -1352,11 +1356,16 @@ export default function App() {
 
   const totalDue = useMemo(() => modules.flatMap(m => m.concepts).filter(isDue).length, [modules]);
 
-  function handleOnboardingComplete(selectedIds) {
+  function handleOnboardingComplete(selectedIds, selectAll = false) {
     setActiveModules(selectedIds);
     saveActiveModules(selectedIds);
-    setMateriaMode("all");
-    localStorage.setItem("spare_onboarding_done", "1");
+    if (selectAll || selectedIds.size > 1) {
+      setMateriaMode("all");
+    } else if (selectedIds.size === 1) {
+      setMateriaMode("module");
+      const idx = modules.findIndex(m => selectedIds.has(m.id));
+      if (idx !== -1) setCurrentModuleIdx(idx);
+    }
     setShowOnboarding(false);
   }
 
@@ -1657,21 +1666,6 @@ export default function App() {
               >Mi LinkedIn</a>
             </div>
             <div className="topbar-right">
-              {sessionActive && (confirmEnd ? (
-                <>
-                  <span style={{ fontSize: 10, color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>¿Terminar?</span>
-                  <button className="btn btn-danger btn-sm" onClick={() => {
-                    setSessionActive(false); setSessionStarted(false);
-                    setQueueIdx(0); setShowAnswer(false);
-                    setSessionStats({ done: 0, automatic: 0, resistant: 0, blank: 0 }); setRepasoCards({ resistant: [], blank: [] }); setRepasoRound(0);
-                    seenIds.clear();
-                    setConfirmEnd(false);
-                  }}>Sí</button>
-                  <button className="btn btn-ghost btn-sm" onClick={() => setConfirmEnd(false)}>No</button>
-                </>
-              ) : (
-                <button className="btn-end-early" onClick={() => setConfirmEnd(true)}>✕ Terminar test</button>
-              ))}
             </div>
           </div>
 
@@ -1947,7 +1941,34 @@ export default function App() {
                 </div>
               ) : currentCard ? (
                 <>
-                  <div className="card">
+                  <div className="card" style={{ position: "relative" }}>
+                    {sessionActive && (
+                      <div style={{ position: "absolute", top: 16, right: 16 }}>
+                        {confirmEnd ? (
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <span style={{ fontSize: 10, color: "var(--text-muted)" }}>¿Terminar?</span>
+                            <button
+                              onClick={() => {
+                                setSessionActive(false); setSessionStarted(false);
+                                setQueueIdx(0); setShowAnswer(false);
+                                setSessionStats({ done: 0, automatic: 0, resistant: 0, blank: 0 }); setRepasoCards({ resistant: [], blank: [] }); setRepasoRound(0);
+                                seenIds.clear(); setConfirmEnd(false);
+                              }}
+                              style={{ background: "#E05C5C", color: "#fff", border: "none", borderRadius: 999, padding: "3px 10px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                            >Sí</button>
+                            <button
+                              onClick={() => setConfirmEnd(false)}
+                              style={{ background: "transparent", color: "var(--text-muted)", border: "1px solid var(--border)", borderRadius: 999, padding: "3px 10px", fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+                            >No</button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setConfirmEnd(true)}
+                            style={{ background: "#E05C5C", color: "#fff", border: "none", borderRadius: 999, padding: "4px 12px", fontSize: 10, fontWeight: 700, cursor: "pointer", letterSpacing: "0.03em", fontFamily: "inherit" }}
+                          >✕ Terminar</button>
+                        )}
+                      </div>
+                    )}
                     <span className="card-tag">{getModuleName(currentCard.id)}</span>
                     <div className="card-question">{currentCard.question}</div>
                     {showAnswer && (
