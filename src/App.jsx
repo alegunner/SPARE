@@ -830,7 +830,7 @@ const GLOBAL_STYLE = `
     /* Topbar: apila left y right en dos filas limpias */
     .topbar { padding: 10px 14px; gap: 6px; flex-wrap: wrap; align-items: center; }
     .topbar-left { flex-wrap: wrap; gap: 5px; align-items: center; }
-    .topbar-left a, .topbar-left span { font-size: 10px !important; padding: 4px 8px !important; white-space: nowrap; }
+    .linkedin-btn { display: none; }
     .topbar-right { flex: 1; min-width: 0; gap: 6px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
 
     /* Selectores: ocultar label, ancho flexible para no truncar */
@@ -978,9 +978,169 @@ function AutorBadge() {
   );
 }
 
+function Onboarding({ modules, onComplete }) {
+  const [step, setStep] = useState(1); // 1: perfil, 2: gradista-pregunta, 3: selección módulos
+  const [perfil, setPerfil] = useState(null);
+  const [selectedMods, setSelectedMods] = useState(new Set());
+
+  const ONBOARDING_STYLE = `
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+    .ob-wrap { min-height: 100vh; background: #0F0A2E; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .ob-inner { width: 100%; max-width: 420px; padding: 48px 32px; text-align: center; }
+    .ob-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #7C6FCD; background: rgba(124,111,205,0.15); padding: 6px 16px; border-radius: 999px; display: inline-block; margin-bottom: 24px; }
+    .ob-title { font-size: 26px; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin: 0 0 8px; }
+    .ob-sub { font-size: 14px; color: #7C6FCD; margin: 0 0 36px; }
+    .ob-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .ob-option { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 16px 24px; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; text-align: left; display: flex; align-items: center; gap: 14px; }
+    .ob-option:hover { background: rgba(255,255,255,0.08); }
+    .ob-option.selected { background: rgba(79,70,229,0.3); border-color: #4F46E5; }
+    .ob-option-icon { width: 36px; height: 36px; border-radius: 50%; background: rgba(99,85,210,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .ob-option-sub { font-size: 12px; color: #7C6FCD; font-weight: 400; margin-top: 2px; }
+    .ob-btn { width: 100%; background: linear-gradient(135deg, #4F46E5, #7C3AED); border: none; border-radius: 999px; padding: 18px; color: #FFFFFF; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .ob-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .ob-btn-ghost { background: none; border: none; color: #7C6FCD; font-size: 13px; cursor: pointer; font-family: inherit; margin-top: 16px; display: block; width: 100%; }
+    .ob-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 36px; }
+    .ob-chip { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 12px 20px; color: #FFFFFF; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .ob-chip:hover { background: rgba(255,255,255,0.08); }
+    .ob-chip.selected { background: rgba(79,70,229,0.3); border-color: #4F46E5; }
+    .ob-simple-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .ob-simple-btn { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 18px 28px; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .ob-option.ob-option-gold { background: rgba(184,134,11,0.15); border-color: #B8860B; }
+    .ob-option.ob-option-gold:hover { background: rgba(212,160,23,0.25); border-color: #D4A017; }
+    .ob-simple-btn:hover { background: rgba(255,255,255,0.08); }
+  `;
+
+  function handlePerfilSelect(p) {
+    setPerfil(p);
+    if (p === "grado") setStep(2);
+    else setStep("placeholder");
+  }
+
+  function handleTodosLosMods() {
+    const allIds = new Set(modules.filter(m => m.concepts.length > 0).map(m => m.id));
+    onComplete(allIds);
+  }
+
+  function handleElegirMods() {
+    setStep(3);
+  }
+
+  function toggleMod(id) {
+    setSelectedMods(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function handleComenzar() {
+    if (selectedMods.size === 0) return;
+    onComplete(selectedMods);
+  }
+
+  const availableMods = modules.filter(m => m.concepts.length > 0);
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: ONBOARDING_STYLE }} />
+      <div className="ob-wrap">
+        <div className="ob-inner">
+
+          {/* ── STEP 1: Perfil ── */}
+          {step === 1 && (
+            <>
+              <span className="ob-badge">SPARE</span>
+              <h1 className="ob-title">¿Cuál es tu<br/>situación actual?</h1>
+              <p className="ob-sub">Personalicemos tu experiencia</p>
+              <div className="ob-options">
+                <button className="ob-option ob-option-gold" onClick={() => handlePerfilSelect("grado")}>
+                  <span className="ob-option-icon" style={{ background: "rgba(184,134,11,0.3)" }}>🎯</span>
+                  <div>
+                    <div>Preparando el grado</div>
+                    <div className="ob-option-sub" style={{ color: "#D4A017" }}>Examen de grado en el horizonte</div>
+                  </div>
+                </button>
+                <button className="ob-option" onClick={() => handlePerfilSelect("pregrado")}>
+                  <span className="ob-option-icon">📚</span>
+                  <div>
+                    <div>Estudiante de pregrado</div>
+                    <div className="ob-option-sub">Cursando la carrera</div>
+                  </div>
+                </button>
+                <button className="ob-option" onClick={() => handlePerfilSelect("abogado")}>
+                  <span className="ob-option-icon">⚖️</span>
+                  <div>
+                    <div>Abogado</div>
+                    <div className="ob-option-sub">Refrescando conocimientos</div>
+                  </div>
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* ── STEP 2: Gradista — ¿ya estudiaste todo? ── */}
+          {step === 2 && (
+            <>
+              <span className="ob-badge">2 de 3</span>
+              <h1 className="ob-title">¿Ya estudiaste<br/>todos los ramos?</h1>
+              <p className="ob-sub">Activaremos los módulos que necesitas</p>
+              <div className="ob-simple-options">
+                <button className="ob-simple-btn" onClick={handleTodosLosMods}>Sí, los estudié todos</button>
+                <button className="ob-simple-btn" onClick={handleElegirMods}>No, quiero elegir ramos</button>
+              </div>
+              <button className="ob-btn-ghost" onClick={() => setStep(1)}>← Volver</button>
+            </>
+          )}
+
+          {/* ── STEP 3: Selección de módulos ── */}
+          {step === 3 && (
+            <>
+              <span className="ob-badge">3 de 3</span>
+              <h1 className="ob-title">¿Qué ramos<br/>quieres practicar?</h1>
+              <p className="ob-sub">Selecciona al menos uno. Puedes cambiar esto después.</p>
+              <div className="ob-chips">
+                {availableMods.map(m => (
+                  <button
+                    key={m.id}
+                    className={`ob-chip${selectedMods.has(m.id) ? " selected" : ""}`}
+                    onClick={() => toggleMod(m.id)}
+                  >
+                    {m.name}
+                  </button>
+                ))}
+              </div>
+              <button className="ob-btn" disabled={selectedMods.size === 0} onClick={handleComenzar}>
+                Comenzar →
+              </button>
+              <button className="ob-btn-ghost" onClick={() => setStep(2)}>← Volver</button>
+            </>
+          )}
+
+          {/* ── PLACEHOLDER: Pregrado y Abogado ── */}
+          {step === "placeholder" && (
+            <>
+              <span className="ob-badge">SPARE</span>
+              <h1 className="ob-title">{perfil === "abogado" ? "Todo listo." : "¡Bienvenido!"}</h1>
+              <p className="ob-sub">
+                {perfil === "abogado"
+                  ? "Hemos preseleccionado todos los módulos disponibles. Puedes ajustar tu selección en cualquier momento desde la barra lateral."
+                  : "Este flujo estará personalizado muy pronto. Por ahora dejamos todos los módulos activos."}
+              </p>
+              <button className="ob-btn" onClick={handleTodosLosMods}>Entrar a SPARE →</button>
+              <button className="ob-btn-ghost" onClick={() => setStep(1)}>← Volver</button>
+            </>
+          )}
+
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   const [modules, setModules] = useState(SEED_DATA);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [isEditor, setIsEditor] = useState(false);
   const [currentModuleIdx, setCurrentModuleIdx] = useState(0);
   const [interrogatorMode, setInterrogatorMode] = useState(false);
@@ -1037,6 +1197,9 @@ export default function App() {
         setActiveModules(allIds);
         saveActiveModules(allIds);
       }
+      try {
+        if (!localStorage.getItem("spare_onboarding_done")) setShowOnboarding(true);
+      } catch { setShowOnboarding(true); }
       setLoading(false);
     });
   }, []);
@@ -1189,6 +1352,14 @@ export default function App() {
 
   const totalDue = useMemo(() => modules.flatMap(m => m.concepts).filter(isDue).length, [modules]);
 
+  function handleOnboardingComplete(selectedIds) {
+    setActiveModules(selectedIds);
+    saveActiveModules(selectedIds);
+    setMateriaMode("all");
+    localStorage.setItem("spare_onboarding_done", "1");
+    setShowOnboarding(false);
+  }
+
   if (loading) return (
     <>
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_STYLE }} />
@@ -1201,6 +1372,10 @@ export default function App() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_STYLE }} />
+      {showOnboarding && (
+        <Onboarding modules={modules} onComplete={handleOnboardingComplete} />
+      )}
+      {!showOnboarding && (
       <div className={`app${interrogatorMode ? " dark-mode" : ""}`}>
 
         {/* ── MODAL ──────────────────────────────────────── */}
@@ -1474,6 +1649,7 @@ export default function App() {
                 style={{ background: "#B8860B", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}
               >☕ Invítame un café</a>
               <a
+                className="linkedin-btn"
                 href="https://www.linkedin.com/in/alejandrovi/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1823,6 +1999,7 @@ export default function App() {
           </div>
         </main>
       </div>
+      )}
     </>
   );
 }
