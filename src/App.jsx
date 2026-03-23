@@ -634,6 +634,10 @@ const GLOBAL_STYLE = `
   }
 
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
   .app { display: flex; height: 100vh; overflow: hidden; }
 
   /* SIDEBAR */
@@ -1012,7 +1016,7 @@ function Onboarding({ modules, onComplete }) {
 
   const ONBOARDING_STYLE = `
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-    .ob-wrap { min-height: 100vh; min-width: 100vw; background: #0F0A2E; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .ob-wrap { position: fixed; inset: 0; background: #0F0A2E; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; overflow-y: auto; z-index: 1000; }
     .ob-inner { width: 100%; max-width: 420px; padding: 48px 32px; text-align: center; }
     .ob-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #7C6FCD; background: rgba(124,111,205,0.15); padding: 6px 16px; border-radius: 999px; display: inline-block; margin-bottom: 24px; }
     .ob-title { font-size: 26px; font-weight: 800; color: #FFFFFF; line-height: 1.2; margin: 0 0 8px; }
