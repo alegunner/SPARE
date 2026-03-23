@@ -633,6 +633,7 @@ const GLOBAL_STYLE = `
     --tag-bg: #2E2B45;
   }
 
+  html, body, #root { margin: 0; padding: 0; width: 100%; height: 100%; }
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
