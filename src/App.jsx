@@ -619,11 +619,11 @@ const GLOBAL_STYLE = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #F5F2EC; --surface: #EDEAE2; --border: #D4CFBF;
-    --text: #1A1814; --text-muted: #7A7468;
-    --accent: #2D4A3E; --accent-light: #3D6455;
-    --auto: #2D4A3E; --resist: #B8860B; --blank: #8B4513;
-    --tag-bg: #DDD9CC;
+    --bg: #F0FAFA; --surface: #FFFFFF; --border: #CCEDE9;
+    --text: #1A2E2C; --text-muted: #6B8E8A;
+    --accent: #0D9488; --accent-light: #0F766E;
+    --auto: #059669; --resist: #D97706; --blank: #DC2626;
+    --tag-bg: #E6F7F5;
   }
   .dark-mode {
     --bg: #1C1A2E; --surface: #252338; --border: #3A3750;
@@ -640,17 +640,17 @@ const GLOBAL_STYLE = `
   .sidebar { width: 280px; min-width: 280px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
   .sidebar-header { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
   .sidebar-header-top { display: flex; align-items: center; justify-content: space-between; }
-  .sidebar-title { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .sidebar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
   .sidebar-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
   .sidebar-scroll::-webkit-scrollbar { width: 3px; }
   .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   .module-item { border-bottom: 1px solid var(--border); }
-  .module-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; cursor: pointer; transition: background 0.15s; }
+  .module-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; cursor: pointer; transition: background 0.15s; border-radius: 8px; }
   .module-header:hover { background: var(--bg); }
-  .module-name { font-size: 13px; font-weight: 500; letter-spacing: 0.02em; }
-  .module-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-  .module-chevron { font-size: 9px; color: var(--text-muted); transition: transform 0.2s; }
+  .module-name { font-size: 13px; font-weight: 700; letter-spacing: 0.01em; }
+  .module-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; font-weight: 500; }
+  .module-chevron { font-size: 9px; color: var(--accent); transition: transform 0.2s; }
   .module-chevron.open { transform: rotate(90deg); }
   .concept-list { padding: 0 10px 8px; }
   .concept-item { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; margin-bottom: 5px; }
@@ -707,14 +707,14 @@ const GLOBAL_STYLE = `
   .dark-mode .import-feedback.error { background: rgba(231,76,60,0.1); }
 
   /* Buttons */
-  .btn { font-family: 'Inter', sans-serif; cursor: pointer; border: none; border-radius: 3px; font-size: 10px; letter-spacing: 0.04em; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; }
-  .btn-primary { background: var(--accent); color: #fff; padding: 8px 14px; font-weight: 500; }
+  .btn { font-family: 'Inter', sans-serif; cursor: pointer; border: none; border-radius: 999px; font-size: 10px; letter-spacing: 0.04em; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; }
+  .btn-primary { background: var(--accent); color: #fff; padding: 10px 18px; font-weight: 700; }
   .btn-primary:hover { background: var(--accent-light); }
-  .btn-ghost { background: transparent; color: var(--text-muted); padding: 6px 10px; border: 1px solid var(--border); }
+  .btn-ghost { background: transparent; color: var(--text-muted); padding: 6px 14px; border: 1.5px solid var(--border); border-radius: 999px; }
   .btn-ghost:hover { background: var(--bg); color: var(--text); border-color: var(--text-muted); }
-  .btn-sm { padding: 4px 8px; font-size: 9px; }
-  .btn-danger { background: transparent; color: #C0392B; border: 1px solid #C0392B; }
-  .btn-danger:hover { background: #C0392B; color: #fff; }
+  .btn-sm { padding: 4px 10px; font-size: 9px; }
+  .btn-danger { background: transparent; color: #DC2626; border: 1.5px solid #DC2626; border-radius: 999px; }
+  .btn-danger:hover { background: #DC2626; color: #fff; }
   .btn-full { width: 100%; justify-content: center; }
   .btn-dashed { border-style: dashed !important; }
 
@@ -753,35 +753,37 @@ const GLOBAL_STYLE = `
   .dark-mode .module-meta { color: var(--text-muted); }
   .dark-mode .sidebar-title { color: var(--text-muted); }
 
-  .study-area { flex: 1; display: flex; align-items: center; justify-content: center; overflow-y: auto; padding: 28px; }
+  .study-area { flex: 1; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 28px; }
   .study-center { width: 100%; max-width: 560px; }
 
   /* Selector de módulo prominente */
   .module-selector-block {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
-    padding: 14px 18px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px;
+    padding: 18px 22px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;
+    box-shadow: 0 2px 12px rgba(13,148,136,0.08);
   }
   .module-selector-label {
-    font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted);
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 700;
   }
   .module-selector-select {
-    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 600;
-    color: var(--text); background: transparent; border: none; outline: none;
-    width: 100%; cursor: pointer; padding: 0; appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7468' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 4px center;
-    padding-right: 22px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700;
+    color: var(--text); background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; outline: none;
+    width: 100%; cursor: pointer; padding: 8px 36px 8px 12px; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230D9488' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+    transition: border-color 0.15s;
   }
-  .dark-mode .module-selector-select { color: var(--text); }
+  .module-selector-select:hover { border-color: var(--accent); }
+  .module-selector-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,0.12); }
 
   .progress-bar-wrap { margin-bottom: 20px; }
-  .progress-info { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
-  .progress-track { height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 1px; transition: width 0.4s ease; }
+  .progress-info { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+  .progress-track { height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s ease; }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 32px 36px; margin-bottom: 16px; }
-  .card-tag { font-size: 9px; color: var(--text-muted); background: var(--tag-bg); padding: 3px 8px; border-radius: 2px; display: inline-block; margin-bottom: 14px; letter-spacing: 0.05em; text-transform: uppercase; }
-  .card-question { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.45; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 36px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(13,148,136,0.08); }
+  .card-tag { font-size: 9px; color: var(--accent); background: var(--tag-bg); padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 14px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+  .card-question { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; line-height: 1.45; }
   .dark-mode .card-question { font-style: italic; }
   .card-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
   .card-answer { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.75; color: var(--text-muted); }
@@ -789,8 +791,8 @@ const GLOBAL_STYLE = `
   @keyframes fadeIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
   .rating-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
-  .btn-rating { font-family: 'Inter', sans-serif; cursor: pointer; border-radius: 4px; padding: 10px 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 3px; border: 1px solid; }
-  .btn-rating .rating-days { font-size: 9px; opacity: 0.7; font-weight: 300; }
+  .btn-rating { font-family: 'Inter', sans-serif; cursor: pointer; border-radius: 999px; padding: 12px 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.02em; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 3px; border: 2px solid; }
+  .btn-rating .rating-days { font-size: 9px; opacity: 0.7; font-weight: 400; }
   .btn-auto { background: transparent; color: var(--auto); border-color: var(--auto); }
   .btn-auto:hover { background: var(--auto); color: #fff; }
   .btn-resist { background: transparent; color: var(--resist); border-color: var(--resist); }
@@ -798,15 +800,19 @@ const GLOBAL_STYLE = `
   .btn-blank { background: transparent; color: var(--blank); border-color: var(--blank); }
   .btn-blank:hover { background: var(--blank); color: #fff; }
 
-  .state-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 48px 36px; text-align: center; }
+  .state-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 36px; text-align: center; box-shadow: 0 2px 12px rgba(13,148,136,0.08); }
   .state-icon { font-size: 32px; margin-bottom: 14px; }
-  .state-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 300; margin-bottom: 8px; }
+  .state-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
   .state-sub { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
 
   .stats-row { display: flex; gap: 8px; }
-  .stat-pill { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; text-align: center; }
-  .stat-num { font-size: 18px; font-weight: 500; color: var(--accent); }
-  .stat-lbl { font-size: 9px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-pill { flex: 1; border: 1.5px solid; border-radius: 16px; padding: 12px 12px; text-align: center; }
+  .stat-pill-revisados { background: rgba(13,148,136,0.08); border-color: rgba(13,148,136,0.2); }
+  .stat-pill-perfecta { background: rgba(5,150,105,0.08); border-color: rgba(5,150,105,0.2); }
+  .stat-pill-incompleta { background: rgba(217,119,6,0.08); border-color: rgba(217,119,6,0.2); }
+  .stat-pill-blank { background: rgba(220,38,38,0.08); border-color: rgba(220,38,38,0.2); }
+  .stat-num { font-size: 20px; font-weight: 800; color: var(--accent); font-family: 'Plus Jakarta Sans', sans-serif; }
+  .stat-lbl { font-size: 9px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
   .select-field:disabled { opacity: 0.45; cursor: not-allowed; }
   .toggle input:disabled ~ .toggle-track { opacity: 0.45; cursor: not-allowed; }
@@ -845,7 +851,7 @@ const GLOBAL_STYLE = `
     .select-field { font-size: 10px; padding: 5px 6px; max-width: none; width: auto; min-width: 0; max-width: 160px; }
 
     /* Área de estudio */
-    .study-area { padding: 14px; }
+    .study-area { padding: 14px; align-items: flex-start; }
     .study-center { max-width: 100%; }
     .card { padding: 20px 18px; }
     .card-question { font-size: 17px; }
@@ -901,6 +907,20 @@ async function loadModulesShared() {
 
 async function saveModulesShared(modules) {
   try { await window.storage.set(SHARED_KEY, JSON.stringify(modules), true); } catch {}
+}
+
+function loadLastSessions() {
+  try { const r = localStorage.getItem("spare_last_sessions"); return r ? JSON.parse(r) : {}; } catch { return {}; }
+}
+function saveLastSession(moduleId) {
+  try {
+    const s = loadLastSessions();
+    s[moduleId] = Date.now();
+    localStorage.setItem("spare_last_sessions", JSON.stringify(s));
+  } catch {}
+}
+function daysAgo(timestamp) {
+  return Math.floor((Date.now() - timestamp) / 86400000);
 }
 
 function loadProgress() {
@@ -962,7 +982,7 @@ function AutorBadge() {
     <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
       <span
         onClick={() => setOpen(v => !v)}
-        style={{ fontSize: 10, background: "#2D4A3E", color: "#fff", padding: "2px 6px", borderRadius: 3, fontFamily: "monospace", cursor: "pointer", userSelect: "none", whiteSpace: "nowrap" }}
+        style={{ fontSize: 9, background: "var(--accent)", color: "#fff", padding: "4px 12px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontWeight: 700, cursor: "pointer", userSelect: "none", whiteSpace: "nowrap", letterSpacing: "0.06em" }}
       >💡 Sobre mí</span>
       {open && (
         <>
@@ -1057,6 +1077,7 @@ function Onboarding({ modules, onComplete }) {
           {step === 1 && (
             <>
               <span className="ob-badge">SPARE</span>
+              <div style={{ fontSize: 10, color: "#E05C5C", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>⚠ En desarrollo</div>
               <h1 className="ob-title">¿Cuál es tu<br/>situación actual?</h1>
               <p className="ob-sub">Personalicemos tu experiencia</p>
               <div className="ob-options">
@@ -1296,6 +1317,13 @@ export default function App() {
     }
     setShowAnswer(false);
     setQueueIdx(i => i + 1);
+    // Registrar última sesión solo si es modo módulo y la tarjeta pertenece al módulo actual
+    if (materiaMode === "module") {
+      const currentMod = modules[currentModuleIdx];
+      if (currentMod && currentMod.concepts.find(c => c.id === currentCard.id)) {
+        saveLastSession(currentMod.id);
+      }
+    }
   }
 
   function addModule() {
@@ -1588,7 +1616,12 @@ export default function App() {
                               <div className="module-meta">
                                 {isPlaceholder
                                   ? "Próximamente"
-                                  : `${mod.concepts.length} concepto${mod.concepts.length !== 1 ? "s" : ""}${dueCount > 0 ? ` · ${dueCount} pendiente${dueCount !== 1 ? "s" : ""}` : ""}`
+                                  : (() => {
+                                      const sessions = loadLastSessions();
+                                      const last = sessions[mod.id];
+                                      const days = last !== undefined ? daysAgo(last) : null;
+                                      return `${mod.concepts.length} preguntas${days !== null ? ` · hace ${days} día${days !== 1 ? "s" : ""}` : ""}`;
+                                    })()
                                 }
                               </div>
                             </div>
@@ -1655,14 +1688,14 @@ export default function App() {
                 href="https://ko-fi.com/alejandroveliz"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ background: "#B8860B", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}
+                style={{ background: "#B8860B", color: "#fff", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.06em", padding: "4px 12px", borderRadius: 999, textDecoration: "none", whiteSpace: "nowrap" }}
               >☕ Invítame un café</a>
               <a
                 className="linkedin-btn"
                 href="https://www.linkedin.com/in/alejandrovi/"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ background: "#0077B5", color: "#fff", fontFamily: "'DM Mono', monospace", fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", padding: "2px 8px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}
+                style={{ background: "#0077B5", color: "#fff", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.06em", padding: "4px 12px", borderRadius: 999, textDecoration: "none", whiteSpace: "nowrap" }}
               >Mi LinkedIn</a>
             </div>
             <div className="topbar-right">
@@ -1706,8 +1739,8 @@ export default function App() {
                         value={isPoolMode ? materiaMode : String(currentModuleIdx)}
                         onChange={e => {
                           const val = e.target.value;
-                          if (val === "all" || val === "civil" || val === "procesal") {
-                            setMateriaMode(val);
+                          if (val === "all") {
+                            setMateriaMode("all");
                             setAllModulesMode(false);
                           } else {
                             setMateriaMode("module");
@@ -1718,8 +1751,6 @@ export default function App() {
                         }}
                       >
                         {activeMods.length > 1 && <option value="all">🌐 Todo lo seleccionado</option>}
-                        {isTodoCivil && <option value="civil">⚖️ Todo Derecho Civil</option>}
-                        {isTodoProcesal && <option value="procesal">📋 Todo Derecho Procesal</option>}
                         {activeMods.map((m) => {
                           const i = modules.indexOf(m);
                           return <option key={m.id} value={i}>{m.name}</option>;
@@ -1741,7 +1772,7 @@ export default function App() {
                   <div style={{ borderTop: "1px solid var(--border)", marginTop: 12, paddingTop: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <span className="module-selector-label" style={{ marginBottom: 0 }}>Extensión</span>
                     <select
-                      style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "var(--text)", background: "transparent", border: "none", outline: "none", cursor: "pointer", textAlign: "right" }}
+                      style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, color: "var(--accent)", background: "var(--tag-bg)", border: "1.5px solid var(--border)", borderRadius: 999, outline: "none", cursor: "pointer", padding: "4px 12px" }}
                       value={String(sessionLimit)}
                       onChange={e => setSessionLimit(Number(e.target.value))}
                     >
@@ -1796,12 +1827,12 @@ export default function App() {
 
               {sessionStarted && <div className="stats-row" style={{ marginBottom: 16 }}>
                 {[
-                  { num: sessionStats.done, lbl: "Revisados", color: "var(--accent)" },
-                  { num: sessionStats.automatic, lbl: "Perfecta", color: "var(--auto)" },
-                  { num: sessionStats.resistant, lbl: "Incompleta", color: "var(--resist)" },
-                  { num: sessionStats.blank, lbl: "Sin respuesta", color: "var(--blank)" },
-                ].map(({ num, lbl, color }) => (
-                  <div key={lbl} className="stat-pill">
+                  { num: sessionStats.done, lbl: "Revisados", color: "var(--accent)", cls: "stat-pill-revisados" },
+                  { num: sessionStats.automatic, lbl: "Perfecta", color: "var(--auto)", cls: "stat-pill-perfecta" },
+                  { num: sessionStats.resistant, lbl: "Incompleta", color: "var(--resist)", cls: "stat-pill-incompleta" },
+                  { num: sessionStats.blank, lbl: "Sin respuesta", color: "var(--blank)", cls: "stat-pill-blank" },
+                ].map(({ num, lbl, color, cls }) => (
+                  <div key={lbl} className={`stat-pill ${cls}`}>
                     <div className="stat-num" style={{ color }}>{num}</div>
                     <div className="stat-lbl">{lbl}</div>
                   </div>
@@ -1817,7 +1848,7 @@ export default function App() {
                         style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 4, borderBottom: "1px dashed var(--text-muted)", paddingBottom: 1, position: "relative" }}
                       >
                         Popurrí de ramos
-                        <span style={{ fontSize: 10, color: "var(--accent)", fontWeight: 700 }}>ⓘ</span>
+                        <span style={{ fontSize: 10, color: "var(--accent)", fontWeight: 700, width: 14, height: 14, borderRadius: "50%", border: "1.5px solid var(--accent)", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, flexShrink: 0 }}>i</span>
                         {expandedModules._popurri && (
                           <>
                             <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 50, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", minWidth: 200, boxShadow: "0 4px 20px rgba(0,0,0,0.12)" }}>
@@ -1833,7 +1864,7 @@ export default function App() {
                           </>
                         )}
                       </span>
-                    ) : materiaMode === "civil" ? "Todo Derecho Civil" : materiaMode === "procesal" ? "Todo Derecho Procesal" : <>Test de <b>{modules[currentModuleIdx]?.name}</b>{injectedCount > 0 ? ` · repasando ${injectedCount} pregunta${injectedCount !== 1 ? "s" : ""} del resto de asignaturas` : ""}</>}</span>
+                    ) : <>Test de <b>{modules[currentModuleIdx]?.name}</b>{injectedCount > 0 ? ` · repasando ${injectedCount} pregunta${injectedCount !== 1 ? "s" : ""} del resto de asignaturas` : ""}</> }</span>
                     <span>{Math.min(queueIdx, originalQueueSize)}/{originalQueueSize}</span>
                   </div>
                   <div className="progress-track">
@@ -1856,7 +1887,7 @@ export default function App() {
                   <div className="state-sub" style={{ marginBottom: 20 }}>
                     <b style={{ color: "var(--text)" }}>{originalQueueSize} preguntas</b>
                     {materiaMode !== "module"
-                      ? <span> · {materiaMode === "civil" ? "Todo Derecho Civil" : materiaMode === "procesal" ? "Todo Derecho Procesal" : "Popurrí de ramos"}</span>
+                      ? <span> · Popurrí de ramos</span>
                       : <>
                           <span> · {modules[currentModuleIdx]?.name}</span>
                           {injectionEnabled && injectedCount > 0 && (
