@@ -569,7 +569,7 @@ function shuffle(arr) {
   return a;
 }
 
-function buildQueue(modules, currentModuleIdx, injectionRate, limit = null, allModules = false, activeModules = null, materiaMode = "module") {
+function buildQueue(modules, currentModuleIdx, injectionCount, limit = null, allModules = false, activeModules = null, materiaMode = "module") {
   const CIVIL = ["Acto Jurídico","Teoría de las Obligaciones","Contratos General","Teoría de los Bienes","Contratos Parte Especial","Personas","Familia","Sucesorio","Daños"];
   const PROCESAL = ["Procesal Orgánico","Proceso y Procedimiento","Ordinario y Sumario","Ejecutivo y Juicios Especiales","Recursos Civiles","Procesal Penal","Recursos Penales"];
 
@@ -602,10 +602,7 @@ function buildQueue(modules, currentModuleIdx, injectionRate, limit = null, allM
 
   const currentPool = limit ? shuffle(currentAll).slice(0, limit) : shuffle(currentAll);
 
-  const injectCount = injectionRate === 0 ? 0 : Math.max(
-    otherAll.length > 0 ? 1 : 0,
-    Math.round(currentPool.length * injectionRate)
-  );
+  const injectCount = injectionCount === 0 ? 0 : Math.min(injectionCount, otherAll.length);
 
   const injected = shuffle(otherAll).slice(0, Math.min(injectCount, otherAll.length));
   const queue = shuffle([...currentPool, ...injected]);
@@ -1208,7 +1205,7 @@ export default function App() {
   const [allModulesMode, setAllModulesMode] = useState(false);
   const [materiaMode, setMateriaMode] = useState("module"); // "module" | "all" | "civil" | "procesal"
   const [injectionEnabled, setInjectionEnabled] = useState(true);
-  const [injectionRate, setInjectionRate] = useState(0.15);
+  const [injectionFixedCount, setInjectionFixedCount] = useState(5);
   const [activeModules, setActiveModules] = useState(() => loadActiveModules() || new Set(SEED_DATA.filter(m => m.concepts.length > 0).map(m => m.id)));
   const [sessionActive, setSessionActive] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
@@ -1273,7 +1270,7 @@ export default function App() {
       return;
     }
     const limit = (sessionLimit === 0 || sessionLimit === -1) ? null : sessionLimit;
-    const { queue: q, injectedCount: ic } = buildQueue(modules, currentModuleIdx, injectionEnabled ? injectionRate : 0, limit, allModulesMode, activeModules, materiaMode);
+    const { queue: q, injectedCount: ic } = buildQueue(modules, currentModuleIdx, injectionEnabled ? injectionFixedCount : 0, limit, allModulesMode, activeModules, materiaMode);
     setQueue(q);
     setOriginalQueueSize(q.length);
     setInjectedCount(ic);
@@ -1284,7 +1281,7 @@ export default function App() {
     setSessionActive(false);
     setSessionStarted(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentModuleIdx, sessionLimit, allModulesMode, injectionEnabled, injectionRate, activeModules, materiaMode]);
+  }, [currentModuleIdx, sessionLimit, allModulesMode, injectionEnabled, injectionFixedCount, activeModules, materiaMode]);
 
   const currentCard = queue[queueIdx] ?? null;
   const progress = originalQueueSize > 0 ? Math.round((Math.min(queueIdx, originalQueueSize) / originalQueueSize) * 100) : 0;
@@ -1700,7 +1697,7 @@ export default function App() {
                 href="https://www.linkedin.com/in/alejandrovi/"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ background: "#0077B5", color: "#fff", fontFamily: "'Inter', sans-serif", fontSize: 9, fontWeight: 700, letterSpacing: "0.06em", padding: "4px 12px", borderRadius: 999, textDecoration: "none", whiteSpace: "nowrap" }}
+                style={{ display: "none" }}
               >Mi LinkedIn</a>
             </div>
             <div className="topbar-right">
@@ -1781,11 +1778,11 @@ export default function App() {
                       value={String(sessionLimit)}
                       onChange={e => setSessionLimit(Number(e.target.value))}
                     >
-                      <option value="10">🔬 10 preguntas</option>
+                      <option value="10">10 preguntas</option>
                       <option value="20">20 preguntas</option>
                       <option value="40">40 preguntas</option>
                       <option value="60">60 preguntas</option>
-                      <option value="0">💀 Todas</option>
+                      <option value="0">Todas</option>
                     </select>
                   </div>
 
@@ -1803,20 +1800,25 @@ export default function App() {
                       </label>
                       {injectionEnabled && (
                         <div style={{ display: "flex", gap: 6, paddingLeft: 20, flexWrap: "wrap" }}>
-                          {[0.15, 0.25, 0.35, 0.50].map(rate => (
+                          {[2, 5, 10, 15].map(count => (
                             <button
-                              key={rate}
-                              onClick={() => setInjectionRate(rate)}
+                              key={count}
+                              onClick={() => setInjectionFixedCount(count)}
                               style={{
-                                fontFamily: "'DM Mono', monospace", fontSize: 10, cursor: "pointer",
-                                padding: "3px 9px", borderRadius: 3, border: "1px solid",
-                                borderColor: injectionRate === rate ? "var(--accent)" : "var(--border)",
-                                background: injectionRate === rate ? "var(--accent)" : "transparent",
-                                color: injectionRate === rate ? "#fff" : "var(--text-muted)",
-                                transition: "all 0.15s"
+                                fontFamily: "'Inter', sans-serif", fontSize: 10, cursor: "pointer",
+                                padding: "3px 9px", borderRadius: 999, border: "1.5px solid",
+                                borderColor: injectionFixedCount === count ? "var(--accent)" : "var(--border)",
+                                background: injectionFixedCount === count ? "var(--accent)" : "transparent",
+                                color: injectionFixedCount === count ? "#fff" : "var(--text-muted)",
+                                transition: "all 0.15s", fontWeight: 700
                               }}
-                            >{Math.round(rate * 100)}%</button>
+                            >{count}</button>
                           ))}
+                        </div>
+                      )}
+                      {injectionEnabled && injectionFixedCount >= sessionLimit && sessionLimit !== 0 && (
+                        <div style={{ fontSize: 10, color: "var(--resist)", paddingLeft: 20, marginTop: 4, fontWeight: 600 }}>
+                          ⚠ Las preguntas inyectadas superan la extensión del test
                         </div>
                       )}
                       {!injectionEnabled && (
@@ -1856,6 +1858,7 @@ export default function App() {
                         <span style={{ fontSize: 10, color: "var(--accent)", fontWeight: 700, width: 14, height: 14, borderRadius: "50%", border: "1.5px solid var(--accent)", display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: 1, flexShrink: 0 }}>i</span>
                         {expandedModules._popurri && (
                           <>
+                            <div onClick={e => { e.stopPropagation(); setExpandedModules(p => ({ ...p, _popurri: false })); }} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
                             <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 50, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", minWidth: 200, boxShadow: "0 4px 20px rgba(0,0,0,0.12)" }}>
                               <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Ramos en este test</div>
                               {modules.filter(m => activeModules.has(m.id) && m.concepts.length > 0).map(m => (
@@ -1865,7 +1868,6 @@ export default function App() {
                                 </div>
                               ))}
                             </div>
-                            <div onClick={() => setExpandedModules(p => ({ ...p, _popurri: false }))} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
                           </>
                         )}
                       </span>
@@ -1896,7 +1898,7 @@ export default function App() {
                       : <>
                           <span> · {modules[currentModuleIdx]?.name}</span>
                           {injectionEnabled && injectedCount > 0 && (
-                            <span> · {Math.round(injectionRate * 100)}% de otras asignaturas activas</span>
+                            <span> · {injectedCount} pregunta{injectedCount !== 1 ? "s" : ""} de otras asignaturas</span>
                           )}
                         </>
                     }
@@ -1977,7 +1979,7 @@ export default function App() {
                     style={{ marginTop: 14, justifyContent: "center", padding: "10px", fontSize: 11 }}
                     onClick={() => {
                       const limit = (sessionLimit === 0 || sessionLimit === -1) ? null : sessionLimit;
-                      const { queue: q, injectedCount: ic } = buildQueue(modules, currentModuleIdx, injectionEnabled ? injectionRate : 0, limit, allModulesMode, activeModules, materiaMode);
+                      const { queue: q, injectedCount: ic } = buildQueue(modules, currentModuleIdx, injectionEnabled ? injectionFixedCount : 0, limit, allModulesMode, activeModules, materiaMode);
                       setQueue(q); setOriginalQueueSize(q.length); setInjectedCount(ic); setQueueIdx(0); setShowAnswer(false);
                       setSessionStats({ done: 0, automatic: 0, resistant: 0, blank: 0 }); setRepasoCards({ resistant: [], blank: [] }); setRepasoRound(0);
                       seenIds.clear();
